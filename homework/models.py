@@ -28,7 +28,7 @@ class Product:
             Если продуктов не хватает, то выбросите исключение ValueError
         """
         if not self.check_quantity(quantity):
-            raise ValueError
+            raise ValueError("Введено не допустимое количество товара")
 
         self.quantity -= quantity
 
@@ -80,7 +80,7 @@ class Cart:
     def get_total_price(self) -> float:
         total_price = 0
         for product, quantity in self.products.items():
-            total_price = product.price * quantity
+            total_price += product.price * quantity
         return total_price
 
     def buy(self):
