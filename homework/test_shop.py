@@ -56,15 +56,17 @@ class TestCart:
         Например, негативные тесты, ожидающие ошибку (используйте pytest.raises, чтобы проверить это)
     """
 
-    def test_product_add_cart(self, product, cart):
+    def test_product_add_cart_zero(self, product, cart):
         with pytest.raises(ValueError, match="Необходимо добавить количество товара"):
             cart.add_product(product, 0)
 
+    def test_product_add_cart_book(self, product, cart):
         cart.add_product(product, 1)
         assert cart.products[product] == 1
 
+    def test_product_add_cart_book_1(self, product, cart):
         cart.add_product(product, 2)
-        assert cart.products[product] == 3
+        assert cart.products[product] == 2
 
     def test_remove_product(self, product, cart):
         cart.add_product(product, 5)
@@ -80,6 +82,27 @@ class TestCart:
         cart.add_product(product, 5)
         cart.remove_product(product)
         assert product not in cart.products
+    def test_remove_two_product_with_producrts(self, product, book, cart):
+        cart.add_product(product, 5)
+        cart.add_product(book, 3)
+        cart.remove_product(product, 3)
+        assert cart.products[product] == 2
+        assert book in cart.products
+        assert cart.products[book] == 3
+
+    def test_remove_non_existent_product(self, product, cart):
+        cart.remove_product(product)
+        assert product not in cart.products
+
+    def test_remove_zero_quantity(self, product, cart):
+        cart.add_product(product, 5)
+        cart.remove_product(product, 0)
+        assert cart.products[product] == 5
+
+    def test_remove_negative_quantity(self, product, cart):
+        cart.add_product(product, 5)
+        with pytest.raises(ValueError):
+            cart.remove_product(product, -3)
 
     def test_clear_cart(self, product, cart):
         cart.add_product(product, 10)

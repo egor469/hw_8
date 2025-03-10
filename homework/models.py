@@ -28,7 +28,7 @@ class Product:
             Если продуктов не хватает, то выбросите исключение ValueError
         """
         if not self.check_quantity(quantity):
-            raise ValueError("Введено не допустимое количество товара")
+            raise ValueError(f'Введено не допустимое количество товара.попонлните товар {self.name}')
 
         self.quantity -= quantity
 
@@ -69,6 +69,8 @@ class Cart:
         Если remove_count больше, чем количество продуктов в позиции, то удаляется вся позиция
         """
         if product in self.products:
+            if remove_count is not None and remove_count < 0:
+                raise ValueError('Количество для дуаление не может быть отрицательным')
             if remove_count is None or remove_count >= self.products[product]:
                 del self.products[product]
             else:
